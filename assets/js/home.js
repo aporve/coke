@@ -26,3 +26,5 @@ function renderPage(page, sectionToScroll) {
 }
 
 var cartData = {};
+
+// staging code
