@@ -609,8 +609,8 @@ function sendDataToBot() {
 }
 
 function passDataToBot(data, bulkType) {
-    $('#loader_coupon').html(`<div id="loading"></div>`);
-    
+    // $('#loader_coupon').html(`<div id="loading"></div>`);
+
     window.parent.postMessage(JSON.stringify({
         event_code: 'custom-checkout-event',
         data: data
