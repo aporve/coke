@@ -676,6 +676,7 @@
 
 .reload_promotion {
    color: #f4000b;
+   cursor: pointer;
 }
 
 .reload_promotion .svg_wrapper_reload {
