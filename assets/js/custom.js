@@ -319,6 +319,23 @@ function insertProducts(products, sortedBy) {
             $(this).siblings(".faq-drawer__content-wrapper").addClass("ashish");
         }
     });
+
+    $('.product-bottom-details').click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        addProducts(this);
+        emptySearch(this);
+    });
+
+    $('.counter__minus').click(function (e) {
+        updateCounter(this, "minus");
+        emptySearch();
+    });
+
+    $('.counter__plus').click(function (e) {
+        updateCounter(this, "add");
+        emptySearch();
+    });
 }
 
 function insertInnerProducts(products) {

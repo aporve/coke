@@ -673,3 +673,17 @@
     color: #999999;
     font-size: 13px;
 }
+
+.reload_promotion {
+   color: #f4000b;
+}
+
+.reload_promotion .svg_wrapper_reload {
+    width: 10px;
+    height: 10px;
+}
+
+.reload_promotion .svg_wrapper_reload svg{
+    width: 10px;
+    height: 10px;
+}

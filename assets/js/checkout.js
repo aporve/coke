@@ -435,9 +435,9 @@ function processQ(data, skuid, bulkType) {
     }
     insertOrderCart(data, skuid);
 
-    if(!bulkType) {
+    /* if(!bulkType) {
         passDataToBot(data, bulkType);
-    }
+    } */
     recalculateCart();
 }
 
@@ -590,6 +590,7 @@ function recalculateCart() {
 }
 
 function updateCounterDataFromCheckout(type, bulk) {
+    $('#loader_coupon').html(`<div class="reload_promotion" onclick=${passDataToBot(cartData)}>Reload <span class="svg_wrapper_reload"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="m8 1.6016c-1.582 0-3.0391 0.57813-4.1562 1.5312-0.15234 0.12109-0.22656 0.31641-0.19141 0.50781 0.03125 0.19531 0.16797 0.35156 0.35156 0.41406s0.39062 0.019531 0.53125-0.10938c0.93359-0.79687 2.1406-1.2773 3.4648-1.2773 2.7734 0 5.0391 2.0977 5.3086 4.7969h-1.5742l2.1328 3.2031 2.1328-3.2031h-1.6289c-0.26953-3.2773-3.0234-5.8633-6.3711-5.8633zm-5.8672 3.7305-2.1328 3.2031h1.6289c0.26953 3.2773 3.0234 5.8633 6.3711 5.8633 1.582 0 3.0391-0.57813 4.1562-1.5312 0.15234-0.12109 0.22656-0.31641 0.19141-0.50781-0.03125-0.19531-0.16797-0.35156-0.35156-0.41406s-0.39062-0.019531-0.53125 0.10938c-0.93359 0.79687-2.1406 1.2773-3.4648 1.2773-2.7734 0-5.0391-2.0977-5.3086-4.7969h1.5742z" fill="#f4000b"/></svg></span></div>`);
     let targetNode = $(event.target).parent();
     let selectedProduct = $(targetNode).attr("product")
     let decodedselectedProduct = JSON.parse(decodeURIComponent(selectedProduct));
@@ -608,6 +609,8 @@ function sendDataToBot() {
 }
 
 function passDataToBot(data, bulkType) {
+    $('#loader_coupon').html(`<div id="loading"></div>`);
+    
     window.parent.postMessage(JSON.stringify({
         event_code: 'custom-checkout-event',
         data: data
