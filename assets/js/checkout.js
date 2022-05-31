@@ -600,7 +600,7 @@ function updateCounterDataFromCheckout(type, bulk) {
     let value = $(targetNode).parent().siblings(".counter__input").val();
     $(`#counter_input_${decodedselectedProduct.sku}`).val(value);
     $(`#counter_input_${decodedselectedProduct.sku}`).change();
-    $('reload_promotion').click(function (e) {
+    $('.reload_promotion').click(function (e) {
         console.log("reload promotion");
         passDataToBot(cartData)
     });
