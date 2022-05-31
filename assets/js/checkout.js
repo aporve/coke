@@ -510,7 +510,8 @@ function recalculateOrderSummary(data) {
     }
     $('.item').fadeOut(300, function () {
         $('#title_loader').empty();
-        $('#loader_coupon').empty();
+        // TEMPORARY DISABLE
+        // $('#loader_coupon').empty();
         $('#loader_summary_bar').empty();
         $('#text__loading').empty();
         $('#continue_cta').removeClass("disabled");
