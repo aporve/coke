@@ -21,7 +21,7 @@ function renderPage(page, sectionToScroll) {
         }
         document.getElementById(`${page}`).style.display = "block";
         document.getElementById(`homepage`).style.display = "none";
-        // passDataToBot(cartData);
+        passDataToBot(cartData);
     }
 
 }
