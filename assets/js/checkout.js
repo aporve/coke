@@ -547,7 +547,8 @@ function recalculateCart() {
     /* Update totals display */
     $('.item').fadeOut(0, function () {
         $('#title_loader').html(`<div>Personalizing Promotions...</div>`);
-        $('#loader_coupon').html(`<div id="loading"></div>`);
+        // TEMPORARY DISABLE
+        // $('#loader_coupon').html(`<div id="loading"></div>`);
         $('#loader_summary_bar').html(`<div id="loading"></div>`);
         $("#notification_bar").html(`<div class="checkout_notification">Promotions Applied!</div>`);
         $('#text__loading').text(`  (Recalculating...)`);
