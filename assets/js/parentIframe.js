@@ -70,7 +70,7 @@ window.addEventListener('message', function (eventData) {
                      data: parsedData
                     }
                 }
-           }, '*');
+           }, 'https://app.yellowmessenger.com');
             return;
         }
 
