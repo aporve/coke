@@ -1,4 +1,7 @@
 var config = {};
+var country = config.country;
+var region = config.region;
+var language = config.language;
 
 function loadPageContent(page, data) {
     config = data;
@@ -6,10 +9,7 @@ function loadPageContent(page, data) {
         insertSearchBar();
         insertTabContainer();
         insertPromotionsContainer();
-        // JAY
-        // insertOrderHistoryProducts();
         insertFilterBar();
-
         let sortedProducts = groupProductsByCategory(config.products, "volume");
         insertProducts(sortedProducts, "volume_name");
         insertInnerProducts(sortedProducts);
@@ -150,6 +150,9 @@ function insertPromotionsContainer() {
     config.promotions.products.map((promotion) => {
         let isdisabled = promotion.quantity_available ? false : true;
         let btnName = isdisabled ? "Out of stock" : "ADD";
+        let promotionPrice = region ? promotion[`price_${region.toLowerCase()}`] || promotion.price : promotion.price;
+        let productName = language ? promotion[`name_${language.toLowerCase()}`] || promotion.name : promotion.name;
+        let productDescription = language ? promotion[`description_${language.toLowerCase()}`] || promotion.description : promotion.description;
         $("#promotions_products_container").append(`
             <div class="product-card">
                 <div class="product-tumb">
@@ -158,11 +161,11 @@ function insertPromotionsContainer() {
                 </div>
                 <div class="product__details">
                     <div class="product__text__wrapper">
-                        <p class="product__name">${promotion.name}</p>
-                        <p class="product__quantity">${promotion.description}</p>
+                        <p class="product__name">${productName}</p>
+                        <p class="product__quantity">${productDescription}</p>
                         ${promotion.description.length > 60 ? `<div class="readmore">read more</div>` : ""}
                         <div class="readless hide">read less</div>
-                        <p class="product__price">Rs. ${numberWithCommas(promotion.price)}</p>
+                        <p class="product__price">Rs. ${numberWithCommas(promotionPrice)}</p>
                     </div>
                     <div isdisabled=${isdisabled} class="product-bottom-details" id="promotions-add-${promotion.sku}" product="${encodeURIComponent(JSON.stringify(promotion))}">
                         <div class="btn" isdisabled=${isdisabled}>${btnName}</div>
@@ -287,9 +290,7 @@ function insertFilterBar() {
 
 function insertProducts(products, sortedBy) {
     let iconValue = sortedBy === "volume_name" ? "icon" : "bybrandsIcons";
-    console.log("icon value --> ", iconValue);
     products.map((product, index) => {
-        console.log("icon inner ", product[iconValue]);
         $("#product_item_container").append(`
             <div class="faq-drawer">
                 <input class="faq-drawer__trigger" id=${"faq-drawer" + "-" + index} type="checkbox" autocomplete="off"/>
@@ -327,6 +328,9 @@ function insertInnerProducts(products, sortBy) {
         product.items.map((item) => {
             let isdisabled = item.quantity_available ? false : true;
             let btnName = isdisabled ? "Out of stock" : "ADD";
+            let itemPrice = region ? item[`price_${region.toLowerCase()}`] || item.price : item.price;
+            let productName = language ? item[`name_${language.toLowerCase()}`] || item.name : item.name;
+            let productDescription = language ? item[`description_${language.toLowerCase()}`] || item.description : item.description;
             $(listitem).append(`
                 <div class="product-card">
                     <div class="product-tumb inner">
@@ -336,9 +340,9 @@ function insertInnerProducts(products, sortBy) {
                     </div>
                     <div class="product__details inner">
                         <div class="product__text__wrapper">
-                            <p class="product__name">${item.name} - ${item.listing_type}</p>
-                            <p class="product__quantity">${item.description}</p>
-                            <p class="product__price">Rs. ${numberWithCommas(item.price)}</p>
+                            <p class="product__name">${productName} - ${item.listing_type}</p>
+                            <p class="product__quantity">${productDescription}</p>
+                            <p class="product__price">Rs. ${numberWithCommas(itemPrice)}</p>
                         </div>
                         <div isdisabled=${isdisabled} class=${`product-bottom-details${sortBy ? "-brand" : ""}`} id="promotions-add-${item.sku}" product="${encodeURIComponent(JSON.stringify(item))}">
                             <div class="btn inner" isdisabled=${isdisabled}>${btnName}</div>
@@ -383,10 +387,6 @@ function saveInput(node) {
     var filter = "keywords";
     var keyword = node.value;
     var filteredData = getAllProducts.filter(function (obj) {
-        console.log("\n\n\n search \n\n\n");
-        console.log(obj[filter]);
-        console.log(keyword.toLowerCase());
-
         if (obj[filter] != "") {
             return obj[filter].includes(keyword.toLowerCase());
         }
@@ -404,12 +404,15 @@ function searchProducts(node) {
     node.map((item) => {
         let isdisabled = item.quantity_available ? false : true;
         let btnName = isdisabled ? "Out of stock" : "ADD";
+        let itemPrice = region ? item[`price_${region.toLowerCase()}`] || item.price : item.price;
+        let productName = language ? item[`name_${language.toLowerCase()}`] || item.name : item.name;
+        let productDescription = language ? item[`description_${language.toLowerCase()}`] || item.description : item.description;
         $("#search_product_wrap").append(`
             <div class="product searchproducts">
                 <div class="left__wrapper">
-                    <div class="name">${item.name} - ${item.listing_type}</div>
-                    <div class="description">${item.description}</div>
-                    <div class="price">Rs. ${numberWithCommas(item.price)}</div>
+                    <div class="name">${productName} - ${item.listing_type}</div>
+                    <div class="description">${productDescription}</div>
+                    <div class="price">Rs. ${numberWithCommas(itemPrice)}</div>
                 </div>
                 <div class="right__wrapper searchbox">
                     <div isdisabled=${isdisabled} class="product-bottom-details" id="promotions-add-searchbox-${item.sku}" product="${encodeURIComponent(JSON.stringify(item))}">
@@ -620,12 +623,10 @@ function switchTabs(id) {
 
 
 function addProducts(quantityInput) {
-    console.log('IN addproduct Fn')
     let siblingWrapper = $(quantityInput).siblings(".counter__wrapper");
     let productData = $(quantityInput).attr("product");
     let decodedProductData = JSON.parse(decodeURIComponent(productData));
     if (cartData && Object.keys(cartData).length !== 0 && cartData[decodedProductData.sku]?.quantity >= decodedProductData?.itemspercase) {
-        console.log('IN addproduct Fn 628')
         showToastMessage(decodedProductData.itemspercase);
         return false;
     }
@@ -647,13 +648,11 @@ function updateCounter(counterInput, type, requestFrom, bulkType) {
         let productData = $(counterInput).attr("product");
         let decodedProductData = JSON.parse(decodeURIComponent(productData));
         if (cartData && Object.keys(cartData).length !== 0 && cartData[decodedProductData.sku]?.quantity > decodedProductData?.itemspercase) {
-            console.log('If1: IN updateCounter Fn');
             showToastMessage(decodedProductData.itemspercase);
             return false;
         }
 
         if (decodedProductData.itemspercase <= parseInt($input.val())) {
-            console.log('If2: IN updateCounter Fn');
             showToastMessage(decodedProductData.itemspercase);
             return false;
         }
@@ -959,7 +958,6 @@ function updateProductsBasedOnProducts(node, type) {
         for (let i = 0; i < products[key].quantity; i++) {
             if (type === "add") {
                 if(parseInt(products[key].quantity) > data.itemspercase) {
-                    console.log('at line 901')
                     showToastMessage(data.itemspercase);
                     $(orderhistoryNode).show();
                     $(node).hide();

@@ -1,6 +1,9 @@
 var config = {};
 var orderCartData = {};
 var discountPrice = 0;
+var country = config.country;
+var region = config.region;
+var language = config.language;
 
 function loadCheckoutPageContent(page, data) {
     config = data;
@@ -32,7 +35,9 @@ function loadCheckoutPageContent(page, data) {
 
 function insertOrderCart(orderCart, skuid) {
     if (Object.keys($(`#${skuid}`)).length !== 0) {
-        let product = orderCart[skuid]["product_data"]
+        let product = orderCart[skuid]["product_data"];
+        let productPrice = region ? product[`price_${region.toLowerCase()}`] || product.price : product.price;
+        let productName = language ? product[`name_${language.toLowerCase()}`] || product.name : product.name;
         let type = orderCart[skuid]["product_data"]["listing_type"];
         if (type) {
             type = `- ${type}`
@@ -43,9 +48,9 @@ function insertOrderCart(orderCart, skuid) {
             $(`#${skuid}`).replaceWith(`
                 <div class="order__section" id=${product.sku}>
                     <div class="details__section">
-                        <div class="name">${product.name} ${type}</div>
+                        <div class="name">${productName} ${type}</div>
                         <div class="discount__offer">
-                            <span class="price">Rs. ${numberWithCommas(product.price)}</span>
+                            <span class="price">Rs. ${numberWithCommas(productPrice)}</span>
                         </div>
                         <div class="discount__detail">${product.discount_detail}</div>
                         <div class="discount__detail__bar">
